@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+	<h1>Hello Vue!</h1>
+	<div id="app">
+		{{ message }}<br>
+		{{ name }}
+	</div>
+	
+	<script type="text/javascript">
+		var app = new Vue({
+			el:"#app",//이걸 적용할 대상
+			data:{
+				message:"기대됩니다",
+				name:"이순신"
+			}
+		});
+	</script>
+	
+	<div id="app2">
+		<span v-bind:title="message"> <!-- 마우스 올리면 박스에 이순신 나옴  -->
+			홍길동
+		</span>
+	</div>
+	
+	<script type="text/javascript">
+		var app2 = new Vue({
+			el:"#app2",
+			data:{
+				message:"이순신"
+			}
+		});
+	</script>
+	
+	<div id="app3">
+		<span v-if="seen">보이나요?</span> <!-- seen 값이 true이면 보임, false이면 안보임 -->
+	</div>
+	
+	<script type="text/javascript">
+		var app3 = new Vue({
+			el:"#app3",
+			data:{
+				seen:false
+			}
+		});
+	</script>
+	
+	<div id="app4">
+		<ol>
+			<li v-for="item in list"> <!-- list라는 배열에 있는걸 하나씩 꺼내서 item이라고 함 -->
+				{{item.name}} <!-- item에 있는 name -->
+			</li>
+		</ol>
+	</div>
+	
+	<script type="text/javascript">
+		var app4 = new Vue({
+			el:"#app4",
+			data:{
+				list:[{name:"사과"},{name:"포도"},{name:"수박"}]
+			}
+		});
+	</script>
+	
+	<div id="app5">
+		<p>{{message}}</p>
+		<button v-on:click="pro">눌러바</button> <!--클릭이벤트, 클릭하면 pro메소드 실행 -->
+	</div>
+	
+	<script type="text/javascript">
+		var app5 = new Vue({
+			el:"#app5",
+			data:{
+				message:"홍길동"
+			},
+			methods:{
+				pro:function(){
+					//message를 한글자씩 분리하고 거꾸로 뒤집고 합침
+					this.message = this.message.split("").reverse().join("");
+				}
+			}
+		});
+	</script>
+	
+	<div id="app6">
+		<p>{{message}}</p>
+		<input v-model="message"> <!-- 입력창에 입력하면 동시에 p태그의 내용도 똑같이 바뀜 -->
+	</div>
+	<script type="text/javascript">
+		var app6 = new Vue({
+			el:"#app6",
+			data:{
+				message:"안녕"
+			}
+		});
+	</script>
+	
+</body>
+</html>

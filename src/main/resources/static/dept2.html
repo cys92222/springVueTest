@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<!-- 기본 이벤트 제거하고 등록 누르면 pro()함수 실행 -->
+<form  id="f" @submit.prevent="pro()">
+	부서번호 : <input type="text" name="dno" id="dno" v-model="d.dno"><br>
+	부서이름 : <input type="text" name="dname" id="dname" v-model="d.dname"><br>
+	부서위치 : <input type="text" name="dloc" id="dloc" v-model="d.dloc"><br>
+	<button>등록</button>
+</form>
+
+<table border="1" width="80%" id="tb">
+ 	<tr>
+ 		<td>부서번호</td>
+ 		<td>부서명</td>
+ 		<td>부서위치</td>
+ 	</tr>
+ 	
+ 	<tr v-for="d in list">
+ 		<td>{{d.dno}}</td>
+ 		<td>{{d.dname}}</td>
+ 		<td>{{d.dloc}}</td>
+ 	</tr>
+</table>
+
+<script type="text/javascript">
+	
+	new Vue({
+		el:"#f",
+		data:{d:{dno:"",dname:"",dloc:""}},
+		methods:{pro : function(){
+			//var data = {dno:this.dno,dname:this.dname,dloc:this.dloc};
+			const axiosConfig = {
+		        headers:{
+		            "Content-Type": "application/x-www-form-urlencoded"
+		        }
+		    }
+			
+			axios.post("/insertDept.do", this.d, axiosConfig ).then(function(res){
+				location.href = "dept2.html";
+			});
+		}}
+	});
+
+	axios.get("/listDept.do").then(function(res){
+		var tb = new Vue({
+			el:"#tb",
+			data:{list:res.data}
+		})
+	});
+</script>
+</body>
+</html>

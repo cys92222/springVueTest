@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+
+<form  id="f">
+	부서번호 : <input type="text" name="dno" id="dno" v-model="d.dno"><br>
+	부서이름 : <input type="text" name="dname" id="dname" v-model="d.dname"><br>
+	부서위치 : <input type="text" name="dloc" id="dloc" v-model="d.dloc"><br>
+	<button v-on:click="add()">등록</button>
+	<button v-on:click="edit()">수정</button>
+	<button v-on:click="remove()">삭제</button>
+</form>
+
+
+<table border="1" width="80%" id="tb">
+ 	<tr>
+ 		<td>부서번호</td>
+ 		<td>부서명</td>
+ 		<td>부서위치</td>
+ 	</tr>
+ 	
+ 	<tr v-for="d in list" v-on:click="sel(d)">
+ 		<td>{{d.dno}}</td>
+ 		<td>{{d.dname}}</td>
+ 		<td>{{d.dloc}}</td>
+ 	</tr>
+</table>
+
+<script type="text/javascript">
+	
+	var url = "/listDept.do";
+	
+	var input_form = new Vue({
+		el:"#f",
+		data:{d:{dno:"",dname:"",dloc:""}},
+		methods:{
+			add:function(){
+				url = "/insertDept.do";
+				callAjax(url);
+			},
+			edit:function(){
+				url = "/updateDept.do";
+				callAjax(url);
+			},
+			remove:function(){
+				url = "/deleteDept.do";
+				callAjax(url);
+			},
+			callAjax:function(url){
+				console.log(url);
+				const axiosConfig = {
+				        headers:{
+				            "Content-Type": "application/x-www-form-urlencoded"
+				        }
+				    }
+					
+					axios.post(url, this.d, axiosConfig ).then(function(res){
+						location.href = "deptAll.html";
+					});
+			}
+		}
+	});
+
+	axios.get("/listDept.do").then(function(res){
+		var tb = new Vue({
+			el:"#tb",
+			data:{list:res.data},
+			methods:{sel:function(d){
+				input_form.d = d;
+			}}
+		})
+	});
+</script>
+</body>
+</html>
