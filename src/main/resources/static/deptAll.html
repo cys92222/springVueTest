@@ -7,15 +7,14 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-
-
-<form  id="f">
+<!-- @submit.prevent 기본 이벤트 제거 -->
+<form  id="f" @submit.prevent>
 	부서번호 : <input type="text" name="dno" id="dno" v-model="d.dno"><br>
 	부서이름 : <input type="text" name="dname" id="dname" v-model="d.dname"><br>
 	부서위치 : <input type="text" name="dloc" id="dloc" v-model="d.dloc"><br>
 	<button v-on:click="add()">등록</button>
 	<button v-on:click="edit()">수정</button>
-	<button v-on:click="remove()">삭제</button>
+	<button v-on:click="remove()">삭제</button>	
 </form>
 
 
@@ -36,38 +35,43 @@
 <script type="text/javascript">
 	
 	var url = "/listDept.do";
+	function callAjax(url, data){
+		console.log(url);
+		const axiosConfig = {
+		       headers:{
+		            "Content-Type": "application/x-www-form-urlencoded"
+		       }
+		    }
+		
+		axios.post(url, data, axiosConfig ).then(function(res){
+				location.href = "deptAll.html";
+		});
+	}
+	
 	
 	var input_form = new Vue({
 		el:"#f",
 		data:{d:{dno:"",dname:"",dloc:""}},
 		methods:{
 			add:function(){
-				url = "/insertDept.do";
-				callAjax(url);
+				url = "/listDept.do";
+				callAjax(url, this.d);
+				return false;
 			},
 			edit:function(){
 				url = "/updateDept.do";
-				callAjax(url);
+				callAjax(url, this.d);
+				return false;
 			},
 			remove:function(){
 				url = "/deleteDept.do";
-				callAjax(url);
-			},
-			callAjax:function(url){
-				console.log(url);
-				const axiosConfig = {
-				        headers:{
-				            "Content-Type": "application/x-www-form-urlencoded"
-				        }
-				    }
-					
-					axios.post(url, this.d, axiosConfig ).then(function(res){
-						location.href = "deptAll.html";
-					});
+				callAjax(url, this.d);
+				return false;
 			}
 		}
 	});
 
+	
 	axios.get("/listDept.do").then(function(res){
 		var tb = new Vue({
 			el:"#tb",
